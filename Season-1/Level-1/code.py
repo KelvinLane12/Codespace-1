@@ -19,21 +19,25 @@ Item = namedtuple('Item', 'type, description, amount, quantity')
 
 MAX_ITEM_AMOUNT = 100000
 MAX_QUANTITY = 100
-Max_Total = 1e6
+MAX_TOTAL = 1e6
 
 def validorder(order: Order):
     payments = Decimal("0")
     expenses = Decimal("0")
 
-   for item in order.items:
-       if item.type == 'payment':
-           if -MAX_ITEM_AMOUNT <= item.amount <= MAX_ITEM_AMOUNT:
-               payments += Decimal(str(item.amount))
+    for item in order.items:
+        if item.type == 'payment':
+            if -MAX_ITEM_AMOUNT <= item.amount <= MAX_ITEM_AMOUNT:
+                payments += Decimal(str(item.amount))
+
         elif item.type == 'product':
             if (type(item.quantity) is int
-                and 0 < item.quantity <= MAX_QUANTITY
-                and 0 < item.amount <= MAX_ITEM_AMOUNT):
-                    expenses += Decimal(str(item.amount)) * item.quantity
+                    and 0 < item.quantity <= MAX_QUANTITY
+                    and 0 < item.amount <= MAX_ITEM_AMOUNT):
+                expenses += Decimal(str(item.amount)) * item.quantity
+
+        else:
+            return "Invalid item type: %s" % item.type
 
     else:
         return "Invalid item type: %s" % item.type
