@@ -25,5 +25,3 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v7
-        # Source of GitHub Action in line 30: 
-
