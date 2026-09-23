@@ -22,19 +22,27 @@ MAX_QUANTITY = 100
 MAX_TOTAL = 1e6
 
 def validorder(order: Order):
-    net = Decimal("0")
+    payments = Decimal("0")
+    expenses = Decimal("0")
 
-    for item in order.items:
-        if item.type == 'payment':
-            net += Decimal(str(item.amount))
+   for item in order.items:
+       if item.type == 'payment':
+           if -MAX_ITEM_AMOUNT <= item.amount <= MAX_ITEM_AMOUNT:
+               payments += Decimal(str(item.amount))
         elif item.type == 'product':
-            if type(item.quantity) is not int or item.quantity <= 0 or item.quantity > 100:
-                return "Invalid quantity: %s" % item.quantity
-            net -= Decimal(str(item.amount)) * item.quantity
-        else:
-            return "Invalid item type: %s" % item.type
+            if (type(item.quantity) is int
+                and 0 < item.quantity <= MAX_QUANTITY
+                and 0 < item.amount <= MAX_ITEM_AMOUNT):
+                    expenses += Decimal(str(item.amount)) * item.quantity
 
-    if net != 0:
-        return "Order ID: %s - Payment imbalance: $%0.2f" % (order.id, net)
     else:
-        return "Order ID: %s - Full payment received!" % order.id
+        return "Invalid item type: %s" % item.type
+
+if abs(payments) > MAX_TOTAL or expenses > MAX_TOTAL:
+    return "Total amount payable for an order exceeded"
+
+if payments != expenses:
+    return "Order ID: %s - Payment imbalance: $%0.2f" % (order.id, payments - expenses)
+else:
+    return "Order ID: %s - Full payment received!" % order.id
+That's it.
