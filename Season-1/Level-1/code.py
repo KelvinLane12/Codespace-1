@@ -19,7 +19,7 @@ Item = namedtuple('Item', 'type, description, amount, quantity')
 
 MAX_ITEM_AMOUNT = 100000
 MAX_QUANTITY = 100
-MAX_TOTAL = 1e6
+Max_Total = 1e6
 
 def validorder(order: Order):
     payments = Decimal("0")
